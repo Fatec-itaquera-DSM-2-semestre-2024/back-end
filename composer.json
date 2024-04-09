@@ -1,15 +1,19 @@
 {
-    "name": "app/app",
+    "name": "flash/login",
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "backend/"
         }
     },
     "authors": [
         {
-            "name": "",
-            "email": ""
+            "name": "faustinopsy",
+            "email": "rodrigohipnose@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "firebase/php-jwt": "^6.9",
+        "bramus/router": "~1.6",
+        "phpmailer/phpmailer": "^6.8"
+    }
 }
