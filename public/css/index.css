@@ -1,0 +1,152 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?família=Poppins:wght@300; 400; 500; 600; 700; 800; 900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", "sans-serif";
+}
+
+/* Fundo */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #A5A9F0;
+}
+
+.inicio_principal {
+  width: 90vw;
+  height: 90vh;
+  background: #ECF0FB;
+  border-radius: 30px;
+  padding: 50px;
+}
+
+/* logo */
+.inicio_icone {
+  width: 47px;
+  height: 47px;
+}
+
+.inicio_barra_cima {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  /* BookRoom */
+  /* Entrar */
+  /* Não tem uma conta? */
+}
+.inicio_barra_cima li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  left: 20px;
+}
+.inicio_barra_cima h1 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 45px;
+  color: #3E4462;
+}
+.inicio_barra_cima .inicio_entrar {
+  margin-left: 35px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+  color: #6052FD;
+  padding: 5px;
+  border: solid 2px #6052FD;
+  border-radius: 10%;
+}
+.inicio_barra_cima .inicio_barra_cima a {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 30px;
+  color: #6052FD;
+}
+
+.inicio_centro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inicio_elementos {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-evenly;
+  flex-direction: column;
+  height: 70vh;
+  /* Boas Vindas! */
+  /* Gostaria de reservar uma sala? */
+  /* Vamos começar */
+  /* Lorem ipsum */
+}
+.inicio_elementos h1 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 96px;
+  color: #7389FB;
+}
+.inicio_elementos h2 {
+  width: 400px;
+  height: 25px;
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+  color: #3E4462;
+}
+.inicio_elementos h3 {
+  margin-top: 60px;
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 47px;
+  color: #3E4462;
+}
+.inicio_elementos h4 {
+  margin-top: 30px;
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  width: 250px;
+  color: #3E4462;
+}
+.inicio_elementos .inicio_reservar {
+  margin-top: 15%;
+  width: 281px;
+  height: 55px;
+  background: linear-gradient(90deg, #AA7AF3 0%, #574DFF 100%);
+  border-radius: 30px;
+  font-family: "Public Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 38px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.inicio_container_foto {
+  width: 633px;
+  height: 685px;
+}/*# sourceMappingURL=style_index.css.map */

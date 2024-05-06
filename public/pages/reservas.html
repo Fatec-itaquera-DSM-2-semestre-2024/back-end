@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/reservas.css">
+    <script src="https://kit.fontawesome.com/3777b52af3.js" crossorigin="anonymous"></script>
+    <title>Reservas</title>
+</head>
+<body>
+    <div class = "conteudoesquerda">
+      <h4><i class="fa-solid fa-chalkboard-user"></i> BookRoom </h4>
+      <h3><b>Reservas</b></h3>
+                <div class="flex-container"></div>
+                <div class="box caixa_botoes"> 
+                <div class="buttons">
+                    <button class="button is-fullwidth botao">Disciplina:Matemática <div class ="verReservasDisciplina"><h2>Ver Reservas da Disciplina</h2></div></button> 
+                    <button class="button is-fullwidth botao">Disciplina:Inglês <div class ="verReservasDisciplina"><h2>Ver Reservas da Disciplina</h2></div></button>
+                    <button class="button is-fullwidth botao">Disciplina:Engenharia <div class ="verReservasDisciplina"><h2>Ver Reservas da Disciplina</h2></div></button></div>
+                    <div class="flex-item">
+                    <button class="button botao_verreservas">Ver todas as reservas <i class="fa-solid fa-eye"></i></button>
+                    <button class="button botao_alterarreservas">Alterar Reservas <i class="fa-solid fa-retweet"></i></button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class = "conteudodireita">
+        <div class="icone">
+            <i class="fa-solid fa-user"></i>
+         </div>
+      <p><b>Prof. Fulano</b></p>
+      <button class="button is-link is-rounded botao-n4">Reservas</button>
+      <p><b>Configurações</b></p>
+      <button onclick="logout()"><p><b>Sair</b></p></button>
+    </div>
+</body>
+</html>
+<script>
+// Verifica se há um token armazenado na sessão
+const token = sessionStorage.getItem('token');
+
+if (!token) {
+  // Redireciona para a página de login
+  window.location.href = '../../index.html';
+} else {
+  // O token está presente, permita o acesso à página
+  console.log('Token encontrado:', token);
+}
+
+  function logout() {
+    // Remove o token da sessão
+    sessionStorage.removeItem('token');
+    
+    // Redireciona para a página inicial
+    window.location.href = '../../index.html';
+  }
+  </script>
+  

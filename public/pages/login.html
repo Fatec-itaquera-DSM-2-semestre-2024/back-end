@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login BookRoom</title>
+  <link rel="icon" href="../img/logo_classroom.png" />
+  <link rel="stylesheet" href="../css/login.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/3777b52af3.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="backgroundLogin">
+    <div class="wrapper">
+      <form action="" id="loginForm">
+        <h1>Login</h1>
+
+        <div class="icon">
+          <i class="fa-brands fa-google"></i>
+        </div>
+
+        <hr class="hrEstilizada" />
+
+        <div class="input-box">
+          <input type="text" placeholder="E-mail" id="input_email" required />
+        </div>
+        <div class="input-box">
+          <input type="password" placeholder="Senha" id="input_senha" required />
+        </div>
+
+        <div class="remember-forgot">
+          <label><input type="checkbox" id="input_lembrar" />Lembre-se de mim</label>
+          <a href="#">Esqueci a senha</a>
+        </div>
+
+        <button type="button" class="btn" id="login" onclick="logar()">Entrar</button>
+      </form>
+    </div>
+
+    <div class="text-right">
+      <h1>Que bom te ver<br />aqui novamente!</h1>
+
+      <h2>Reserve suas salas de<br />uma forma fácil!</h2>
+
+      <h3>Não tem uma conta?</h3>
+
+      <button type="button" class="botao">
+        <a href="./cadastro.html">Cadastre-se</a>
+      </button>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+function logar() {
+  const email = document.getElementById('input_email').value;
+  const senha = document.getElementById('input_senha').value;
+  const lembrar = document.getElementById('input_lembrar').checked;
+
+  const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: email,
+    senha: senha,
+    lembrar: lembrar
+  })
+};
+
+fetch('http://localhost:8000/src/Router/Usuarios/login', options)
+.then(response => {
+    if (!response.ok) {
+      throw new Error('Erro na resposta da API');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Verifique se o token está presente nos dados recebidos
+    if (data.token) {
+      sessionStorage.setItem('token', data.token);
+      console.log('Token armazenado com sucesso:', data.token);
+      window.location.href = './reservas.html';
+    } else {
+      console.error('Token não encontrado na resposta da API.');
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao obter o token:', error);
+  });
+}
+</script>
