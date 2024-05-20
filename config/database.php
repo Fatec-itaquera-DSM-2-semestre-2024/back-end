@@ -1,12 +1,18 @@
 <?php
-$servername = "localhost";
-$username = "root";
+namespace App\Config;
+
+$servername = "127.0.0.1";
+$username = "duno";
 $password = "3264";
-$dbname = "jwt_login";
+$dbname = "fatec";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$pdo = new PDO("mysql:host=localhost;dbname=$dbname", $username, $password);
+$pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
 
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+$unbufferedResult = $pdo->query("SELECT nome FROM City");
+foreach ($unbufferedResult as $row) {
+    echo $row['nome'] . PHP_EOL;
 }
+
+
 ?>
