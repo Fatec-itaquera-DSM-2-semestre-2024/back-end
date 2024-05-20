@@ -42,7 +42,6 @@ function addUsuarioRoutes($router) {
             echo json_encode(['status' => true, 'perfis' => $perfis]);
             
         });
-
         $router->get('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
@@ -57,7 +56,6 @@ function addUsuarioRoutes($router) {
                     exit;
                 }
         });
-
         $router->put('/', function () {
             $permitido = new TokenController();
             $permitido->autorizado();
@@ -104,7 +102,7 @@ function addUsuarioRoutes($router) {
             $resultado = $usuariosController->ativarTwoFactor(); 
             echo json_encode( $resultado);
         });
-        $router->post('/Registrar', function () {
+        $router->post('/registrar', function () {
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
             $usuario->setNome($body['nome']);
