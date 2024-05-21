@@ -2,8 +2,8 @@
 namespace App\Controllers;
 use App\Models\Reservation;
 
-include_once '../config/database.php';
-include_once '../models/Reservation.php';
+include_once __DIR__ . '/../config/database.php';
+include_once __DIR__ . '/../config/jwt.php';
 
 class ReservationController {
 

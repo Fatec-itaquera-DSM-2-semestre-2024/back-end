@@ -4,9 +4,9 @@ namespace App\Controllers;
 use Firebase\JWT\JWT;
 use App\Models\User;
 
-include_once '../config/database.php';
-include_once '../models/User.php';
-include_once '../config/jwt.php';
+include_once __DIR__ . '/../config/database.php';
+include_once __DIR__ . '/../config/jwt.php';
+include_once __DIR__ . '/../models/User.php';
 
 class AuthController {
 

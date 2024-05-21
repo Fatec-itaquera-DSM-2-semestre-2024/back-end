@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+include_once __DIR__ . '/../config/database.php';
 
 class User {
     private $conn;
@@ -12,6 +13,7 @@ class User {
 
     public function create($username, $password) {
         $sql = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
+        echo $sql;
         return $this->conn->query($sql);
     }
 
