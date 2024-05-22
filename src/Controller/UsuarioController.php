@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Model\Usuario;
@@ -15,7 +16,6 @@ class UsuarioController
     {
         $usuario = new Usuario();
         return $usuario->selectById($id);
-        
     }
 
     function cadastrar($id, $nome, $login, $email, $senha)

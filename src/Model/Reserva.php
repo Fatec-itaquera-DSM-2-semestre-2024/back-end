@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Database\Connection;
@@ -6,36 +7,34 @@ use Exception;
 
 class Reserva
 {
- 
+
     function selectAll()
     {
-        try{
+        try {
             $db = new Connection();
             $sql = ' select * from reserva';
             return $db->query($sql);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-	function selectById($id){
-        try{
+    function selectById($id)
+    {
+        try {
             $db = new Connection();
-            $sql = ' select * from reserva where id_reserva = "'.$id.'";' ;
+            $sql = ' select * from reserva where id_reserva = "' . $id . '";';
             return $db->query($sql);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             return $e->getMessage();
-        }		
-	}
-	
-	function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
-	{
-		$db = new Connection();
-		$sql = 'insert into reserva (
+        }
+    }
+
+    function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    {
+        try {
+            $db = new Connection();
+            $sql = 'insert into reserva (
             id_reserva, 
             destinatario_reserva, 
             observacao, data_reserva, 
@@ -44,39 +43,48 @@ class Reserva
             confirmada, 
             id_sala, 
             id_usuario) values (
-                "'.$id.'",
-                "'.$destinatario.'",
-                "'.$observacao.'",
-                "'.$data.'",
-                "'.$horario_inicio.'",
-                "'.$horario_fim.'",
-                "'.$confirma.'",
-                "'.$id_sala.'",
-                "'.$id_usuario.'")';
-		return $db->query_insert($sql);	
-	}
+                "' . $id . '",
+                "' . $destinatario . '",
+                "' . $observacao . '",
+                "' . $data . '",
+                "' . $horario_inicio . '",
+                "' . $horario_fim . '",
+                "' . $confirma . '",
+                "' . $id_sala . '",
+                "' . $id_usuario . '")';
+            return $db->query_insert($sql);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     function atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
     {
-        $db = new Connection();
-        $sql = 'update reserva set 
-            destinatario_reserva = "'.$destinatario.'",
-            observacao = "'.$observacao.'",
-            data_reserva = "'.$data.'",
-            horario_inicio = "'.$horario_inicio.'",
-            horario_fim = "'.$horario_fim.'",
-            confirmada = "'.$confirma.'",
-            id_sala = "'.$id_sala.'",
-            id_usuario = "'.$id_usuario.'" where id_reserva = '.$id; 
-        return $db->query_update($sql);
+        try {
+            $db = new Connection();
+            $sql = 'update reserva set 
+            destinatario_reserva = "' . $destinatario . '",
+            observacao = "' . $observacao . '",
+            data_reserva = "' . $data . '",
+            horario_inicio = "' . $horario_inicio . '",
+            horario_fim = "' . $horario_fim . '",
+            confirmada = "' . $confirma . '",
+            id_sala = "' . $id_sala . '",
+            id_usuario = "' . $id_usuario . '" where id_reserva = ' . $id;
+            return $db->query_update($sql);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
-	
-	function excluir($id){
-        $db = new Connection();
-        $sql = 'delete from reserva where id_reserva = '.$id;
-        return $db->query_delete($sql);
-    }
-	
-}
 
-?>
+    function excluir($id)
+    {
+        try {
+            $db = new Connection();
+            $sql = 'delete from reserva where id_reserva = ' . $id;
+            return $db->query_delete($sql);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+}

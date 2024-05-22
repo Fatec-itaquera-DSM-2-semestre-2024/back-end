@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Model\Reserva;
@@ -15,7 +16,6 @@ class ReservaController
     {
         $usuario = new Reserva();
         return $usuario->selectById($id);
-        
     }
 
     function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
