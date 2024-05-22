@@ -1,35 +1,37 @@
 <?php
-
-namespace App\reservas;
-require "../../vendor/autoload.php";
+namespace App\Router;
 
 use App\Controller\ReservaController;
 
-$reserva = new ReservaController();
+function addReservaRoutes($router) {
+    $router->mount('/Reservas', function () use ($router) {
+        $router->get('/', function () {
+            $reserva = new ReservaController();
+            echo json_encode($reserva->selectAll());
+        });
 
-$body = json_decode(file_get_contents('php://input'), true);
-$id=isset($_GET['id'])?$_GET['id']:'';
-switch($_SERVER["REQUEST_METHOD"]){
-    case "POST";
-        $resultado = $reserva->insert($body);
-        echo json_encode(['status'=>$resultado]);
-    break;
-    case "GET";
-        if(!isset($_GET['id'])){
-            $resultado = $reserva->select();
-            echo json_encode(["reservas"=>$resultado]);
-        }else{
-            $resultado = $reserva->selectId($id);
-            echo json_encode(["status"=>true,"reservas"=>$resultado[0]]);
-        }
-       
-    break;
-    case "PUT";
-        $resultado = $reserva->update($body,intval($_GET['id']));
-        echo json_encode(['status'=>$resultado]);
-    break;
-    case "DELETE";
-        $resultado = $reserva->delete(intval($_GET['id']));
-        echo json_encode(['status'=>$resultado]);
-    break;  
+        $router->get('/{id}', function ($id) {
+            $reserva = new ReservaController();
+            echo json_encode($reserva->selectById($id));
+        });
+        
+        $router->post('/cadastrar', function () {
+            $reserva = new ReservaController();
+            $data = json_decode(file_get_contents('php://input'), true);
+            echo json_encode($reserva->cadastrar($data['id_reserva'], $data['destinatario_reserva'], $data['observacao'], $data['data_reserva'], $data['horario_inicio'], $data['horario_fim'], $data['confirma'], $data['id_sala'], $data['id_usuario']));
+        });
+        
+        $router->put('/{id}', function ($id) {
+            $reserva = new ReservaController();
+            $data = json_decode(file_get_contents('php://input'), true);
+            echo json_encode($reserva->atualizar($id, $data['destinatario_reserva'], $data['observacao'], $data['data_reserva'], $data['horario_inicio'], $data['horario_fim'], $data['confirma'], $data['id_sala'], $data['id_usuario']));           
+        });
+
+        $router->delete('/{id}', function ($id) {
+            $reserva = new ReservaController();
+            echo json_encode($reserva->excluir($id));
+ 
+        });
+    });
 }
+

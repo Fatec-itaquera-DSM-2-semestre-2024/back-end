@@ -1,47 +1,38 @@
 <?php
-
 namespace App\Controller;
 
-use App\Model\Model;
+use App\Model\Reserva;
 
-class ReservaController {
-
-    private $db;
-
-    public function __construct() {
-        $this->db = new Model();
+class ReservaController
+{
+    function selectAll()
+    {
+        $usuario = new Reserva();
+        return $usuario->selectAll();
     }
-    public function select(){
-        $user = $this->db->select('reservas');
+
+    function selectById($id)
+    {
+        $usuario = new Reserva();
+        return $usuario->selectById($id);
         
-        return  $user;
     }
-    public function selectId($id){
-        $user = $this->db->select('reservas',['id'=>$id]);
-        
-        return  $user;
+
+    function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    {
+        $usuario = new Reserva();
+        return $usuario->cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario);
     }
-    public function insert($data){
-        if($this->db->insert('reservas', $data)){
-            return true;
-        }
-        return false;
+
+    function atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    {
+        $usuario = new Reserva();
+        return $usuario->atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario);
     }
-    
-    public function update($newData,$conditions){
-        if($this->db->update('reservas', $newData, ['id'=>$conditions])){
-            return true;
-        }
-        return false;
-    }
-    public function delete( $id){
-        $resultado =$this->selectId($id);
-        if(count($resultado)<1){
-            return false;
-        }
-        if($this->db->delete('reservas', ['id'=>$id])){
-            return true;
-        }
-        return false;        
+
+    function excluir($id)
+    {
+        $usuario = new Reserva();
+        return $usuario->excluir($id);
     }
 }

@@ -1,21 +1,16 @@
 <?php
 namespace App\Router;
-require "../../vendor/autoload.php";
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Bramus\Router\Router;
 
 $router = new Router();
 
 require __DIR__ . '/Usuarios.php';
-require __DIR__ . '/Token.php';
+require __DIR__ . '/Reservas.php';
 
 header('Content-Type: application/json');
 
-// In case one is using PHP 5.4's built-in server
-$filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
-if ( php_sapi_name() === 'cli-server' && is_file($filename)) {
-    return false;
-}
 
 $router->set404(function () {
     header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
@@ -40,9 +35,9 @@ $router->set404('/api(/.*)?', function() {
 $router->before('GET', '/.*', function () {
     header('X-Powered-By: bramus/router');
 });
-
-addTokenRoutes($router);    
+   
 addUsuarioRoutes($router);
+addReservaRoutes($router);
 
 $router->run();
 
