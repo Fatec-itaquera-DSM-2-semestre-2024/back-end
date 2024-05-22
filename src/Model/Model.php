@@ -30,8 +30,8 @@ use ReflectionProperty;
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:" . "Database/banco_x.db";
-            $filepath =  "Database/banco_x.db";
+            $dsn = "sqlite:" . __DIR__ . "/../Database/banco_x.db";
+            $filepath =  __DIR__ . "/../Database/banco_x.db";
             if (!file_exists($filepath)) {
                 die("Arquivo não encontrado: $filepath");
             }

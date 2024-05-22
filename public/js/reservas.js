@@ -18,7 +18,7 @@ function logout() {
 }
 
 function ver_reservas(){
-    fetch('http://localhost:80/src/reservas.php', {
+    fetch('http://localhost:80/src/Router/Reservas.php', {
         method: 'GET'
     })
     .then(response => {
@@ -97,7 +97,7 @@ function criar_reserva(){
         confirmada_reserva: confirmada_reserva,
         id_usuario: sessionStorage.getItem('token')
     };
-    fetch('http://localhost:80/src/reservas.php', { 
+    fetch('http://localhost:80/src/Router/Reservas.php', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ function criar_reserva(){
 function getReserva() {
     const userId = document.getElementById("getReservaId").value;
 
-    fetch('http://localhost:80/src/reservas.php?id=' + userId, {
+    fetch('http://localhost:80/src/Router/Reservas.php?id=' + userId, {
         method: 'GET'
     })
     .then(response => {
