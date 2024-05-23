@@ -1,44 +1,55 @@
 <?php
 
 namespace App\Controller;
-use App\Model\Model;
-class SoftwareController {
-    private $db;
+use App\Model\Software;
+use Exception;
 
-    public function __construct() {
-        $this->db = new Model();
-    }
-    public function select(){
-        $user = $this->db->select('software');
-        
-        return  $user;
-    }
-    public function selectId($id){
-        $user = $this->db->select('software',['id'=>$id]);
-        
-        return  $user;
-    }
-    public function insert($data){
-        if($this->db->insert('software', $data)){
-            return true;
+class SoftwareController
+{
+    private function getBearerToken()
+    {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = [];
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                return $matches[1];
+            }
         }
-        return false;
+        throw new Exception('Token não fornecido ou inválido');
     }
-    
-    public function update($newData,$conditions){
-        if($this->db->update('software', $newData, ['id'=>$conditions])){
-            return true;
-        }
-        return false;
+
+    function selectAll()
+    {
+        $token = $this->getBearerToken();
+        $software = new Software();
+        return $software->selectAll($token);
     }
-    public function delete( $id){
-        $resultado =$this->selectId($id);
-        if(count($resultado)<1){
-            return false;
-        }
-        if($this->db->delete('software', ['id'=>$id])){
-            return true;
-        }
-        return false;        
+
+    function selectById($id)
+    {
+        $token = $this->getBearerToken();
+        $software = new Software();
+        return $software->selectById($id, $token);
+    }
+
+    function cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    {
+        $token = $this->getBearerToken();
+        $software = new Software();
+        return $software->cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
+    }
+
+    function atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    {
+        $token = $this->getBearerToken();
+        $software = new Software();
+        return $software->atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
+    }
+
+    function excluir($id)
+    {
+        $token = $this->getBearerToken();
+        $software = new Software();
+        return $software->excluir($id, $token);
     }
 }

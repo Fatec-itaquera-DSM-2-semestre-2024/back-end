@@ -1,36 +1,78 @@
 <?php
 
 namespace App\Router;
-require "../../vendor/autoload.php";
 
 use App\Controller\SoftwareController;
+use Exception;
 
-$software = new SoftwareController();
+function addvRoutes($router)
+{
+    $router->mount('/Software', function () use ($router) {
+        $router->get('/', function () {
+            try {
+                $software = new ReservaController();
+                if ($softwares = $software->selectAll()) {
+                    echo json_encode($v);
+                } else {
+                    echo json_encode(['error' => 'Nenhum software encontrado']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        });
 
-$body = json_decode(file_get_contents('php://input'), true);
-$id = isset($_GET['id'])?$_GET['id']:'';
-switch($_SERVER["REQUEST_METHOD"]){
-    case "POST";
-        $resultado = $software->insert($body);
-        echo json_encode(['status'=>$resultado]);
-    break;
-    case "GET";
-        if(!isset($_GET['id'])){
-            $resultado = $software->select();
-            echo json_encode(["software"=>$resultado]);
-        }else{
-            $resultado = $software->selectId($id);
-            echo json_encode(["status"=>true,"software"=>$resultado[0]]);
-        }
-       
-    break;
-    case "PUT";
-        $resultado = $software->update($body,intval($_GET['id']));
-        echo json_encode(['status'=>$resultado]);
-    break;
-    case "DELETE";
-        $resultado = $software->delete(intval($_GET['id']));
-        echo json_encode(['status'=>$resultado]);
-    break;  
+        $router->get('/{id}', function ($id) {
+            try {
+                $software = new SoftwareController();
+                if ($software = $software->selectById($id)) {
+                    echo json_encode($software);
+                } else {
+                    echo json_encode(['error' => 'Software não encontrado']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        });
+
+        $router->post('/cadastrar', function () {
+            try {
+                $software = new SoftwareController();
+                $data = json_decode(file_get_contents('php://input'), true);
+                if ($software->cadastrar($data['id_software'], $data['nome_software'], $data['versao_software'], $data['descricao_software'], $data['preco_software'])) {
+                    echo json_encode(['success' => 'Software cadastrado com sucesso']);
+                } else {
+                    echo json_encode(['error' => 'Erro ao cadastrar software']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        });
+
+        $router->put('/{id}', function ($id) {
+            try {
+                $software = new SoftwareController();
+                $data = json_decode(file_get_contents('php://input'), true);
+                if ($software->atualizar($data['id_software'], $data['nome_software'], $data['versao_software'], $data['descricao_software'], $data['preco_software'])) {
+                    echo json_encode(['success' => 'Software atualizado com sucesso']);
+                } else {
+                    echo json_encode(['error' => 'Erro ao atualizar software']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        });
+
+        $router->delete('/{id}', function ($id) {
+            try {
+                $software = new SoftwareController();
+                if ($software->excluir($id)) {
+                    echo json_encode(['success' => 'Software excluído com sucesso']);
+                } else {
+                    echo json_encode(['error' => 'Erro ao excluir reserva']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['error' => $e->getMessage()]);
+            }
+        });
+    });
 }
-
