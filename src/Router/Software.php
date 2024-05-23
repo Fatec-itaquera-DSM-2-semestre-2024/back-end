@@ -5,7 +5,7 @@ namespace App\Router;
 use App\Controller\SoftwareController;
 use Exception;
 
-function addvRoutes($router)
+function addSoftwareRoutes($router)
 {
     $router->mount('/Software', function () use ($router) {
         $router->get('/', function () {
