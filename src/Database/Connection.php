@@ -1,73 +1,50 @@
 <?php
 namespace App\Database;
+
 use PDO;
 use PDOException;
-
-$servername = "localhost";
-$username = "root";
-$password = "3264";
-$dbname = "fatec";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // Definir o modo de erro do PDO para exceção
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conexão bem-sucedida";
-} catch(PDOException $e) {
-    echo "Conexão falhou: " . $e->getMessage();
-}
+use Exception;
 
 class Connection
 {
-    private $conn;
-    
-    function __construct()
+    private $pdo;
+
+    public function __construct()
     {
         $servername = "localhost";
         $username = "root";
         $password = "3264";
         $dbname = "fatec";
-
         try {
-            $this->conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            // Definir o modo de erro do PDO para exceção
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo "Conexão bem-sucedida";
-        } catch(PDOException $e) {
-            echo "Conexão falhou: " . $e->getMessage();
+            $this->pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new Exception($e->getMessage());
         }
-
     }
 
-    function query($sql)
+    public function query($sql, $params = [])
     {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
-
-    function query_insert($sql)
+    public function query_insert($sql, $params = [])
     {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $this->conn->lastInsertId();
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
 
-    function query_update($sql)
+    public function query_update($sql, $params = [])
     {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->rowCount();
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
 
-    function query_delete($sql)
+    public function query_delete($sql, $params = [])
     {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->rowCount();
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
 }
-
-?>
