@@ -11,8 +11,8 @@ function addvRoutes($router)
         $router->get('/', function () {
             try {
                 $software = new SoftwareController();
-                if ($softwares = $software->selectAll()) {
-                    echo json_encode($softwares);
+                if ($software = $software->selectAll()) {
+                    echo json_encode($software);
                 } else {
                     echo json_encode(['error' => 'Nenhum software encontrado']);
                 }

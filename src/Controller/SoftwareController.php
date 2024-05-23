@@ -36,14 +36,14 @@ class SoftwareController
     {
         $token = $this->getBearerToken();
         $software = new Software();
-        return $software->cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
+        return $software->cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software, $token);
     }
 
     function atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
     {
         $token = $this->getBearerToken();
         $software = new Software();
-        return $software->atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
+        return $software->atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software, $token);
     }
 
     function excluir($id)

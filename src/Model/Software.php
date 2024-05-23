@@ -43,7 +43,7 @@ class Software
         }
     }
 
-    function cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    function cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software, $token)
     {
         try {
             $this->validateToken($token);
@@ -73,7 +73,7 @@ class Software
         }
     }
 
-    function atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    function atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software, $token)
     {
         try {
             $this->validateToken($token);
