@@ -12,34 +12,6 @@
 [Postman de teste](https://app.getpostman.com/join-team?invite_code=ceade3ccca6aafd05e148e412b8f5bef&target_code=f1ec94e150877067728285b121169ad1)
 
 
-## Testando
-1. Clone o repositório:
-    ```sh
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    ```
-2. Navegue até o diretório do projeto:
-    ```sh
-    cd seu-repositorio
-    ```
-3. Configure o banco de dados no arquivo `src/Database/Connection.php`:
-    ```php
-    define('DB_SERVER', 'localhost');
-    define('DB_USERNAME', 'seu-usuario');
-    define('DB_PASSWORD', 'sua-senha');
-    define('DB_NAME', 'nome_do_banco');
-    ```
-4. Instale as dependências (se houver):
-    ```sh
-    composer install
-    ```
-
-## Executando o Projeto
-1. Inicie o servidor PHP:
-    ```sh
-    php -S localhost:80
-    ```
-2. O sistema estará acessível através de `http://localhost:80`
-
 ## Rotas da API
 Abaixo estão as rotas disponíveis no sistema e suas respectivas funcionalidades.
 
