@@ -2,17 +2,18 @@
 
 namespace App\Router;
 
-use App\Controller\SoftwareController;
+use App\Controller\ReservaController; // Mantendo a referência correta ao controlador
 use Exception;
 
-function addvRoutes($router)
+function addSoftwareRoutes($router)
 {
-    $router->mount('/Software', function () use ($router) {
+    $router->mount('/software', function () use ($router) {
         $router->get('/', function () {
             try {
-                $software = new ReservaController();
-                if ($softwares = $software->selectAll()) {
-                    echo json_encode($v);
+                $softwareController = new ReservaController(); // Utilizando o controlador correto
+                $softwares = $softwareController->selectAll();
+                if ($softwares) {
+                    echo json_encode(['data' => $softwares]);
                 } else {
                     echo json_encode(['error' => 'Nenhum software encontrado']);
                 }
@@ -23,9 +24,10 @@ function addvRoutes($router)
 
         $router->get('/{id}', function ($id) {
             try {
-                $software = new SoftwareController();
-                if ($software = $software->selectById($id)) {
-                    echo json_encode($software);
+                $softwareController = new ReservaController(); // Utilizando o controlador correto
+                $software = $softwareController->selectById($id);
+                if ($software) {
+                    echo json_encode(['data' => $software]);
                 } else {
                     echo json_encode(['error' => 'Software não encontrado']);
                 }
@@ -36,9 +38,15 @@ function addvRoutes($router)
 
         $router->post('/cadastrar', function () {
             try {
-                $software = new SoftwareController();
+                $softwareController = new ReservaController(); // Utilizando o controlador correto
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($software->cadastrar($data['id_software'], $data['nome_software'], $data['versao_software'], $data['descricao_software'], $data['preco_software'])) {
+                if ($softwareController->cadastrar(
+                    $data['id_software'], 
+                    $data['nome_software'], 
+                    $data['versao_software'], 
+                    $data['descricao_software'], 
+                    $data['preco_software']
+                )) {
                     echo json_encode(['success' => 'Software cadastrado com sucesso']);
                 } else {
                     echo json_encode(['error' => 'Erro ao cadastrar software']);
@@ -50,9 +58,15 @@ function addvRoutes($router)
 
         $router->put('/{id}', function ($id) {
             try {
-                $software = new SoftwareController();
+                $softwareController = new ReservaController(); // Utilizando o controlador correto
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($software->atualizar($data['id_software'], $data['nome_software'], $data['versao_software'], $data['descricao_software'], $data['preco_software'])) {
+                if ($softwareController->atualizar(
+                    $id,
+                    $data['nome_software'], 
+                    $data['versao_software'], 
+                    $data['descricao_software'], 
+                    $data['preco_software']
+                )) {
                     echo json_encode(['success' => 'Software atualizado com sucesso']);
                 } else {
                     echo json_encode(['error' => 'Erro ao atualizar software']);
@@ -64,11 +78,11 @@ function addvRoutes($router)
 
         $router->delete('/{id}', function ($id) {
             try {
-                $software = new SoftwareController();
-                if ($software->excluir($id)) {
+                $softwareController = new ReservaController(); // Utilizando o controlador correto
+                if ($softwareController->excluir($id)) {
                     echo json_encode(['success' => 'Software excluído com sucesso']);
                 } else {
-                    echo json_encode(['error' => 'Erro ao excluir reserva']);
+                    echo json_encode(['error' => 'Erro ao excluir software']);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);

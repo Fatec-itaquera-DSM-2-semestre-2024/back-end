@@ -1,12 +1,20 @@
 <?php
 
 namespace App\Controller;
+
 use App\Model\Software;
 use Exception;
 
 class SoftwareController
 {
-    private function getBearerToken()
+    private $token;
+
+    public function __construct()
+    {
+        $this->token = $this->getBearerToken();
+    }
+
+    private function getBearerToken(): string
     {
         $headers = apache_request_headers();
         if (isset($headers['Authorization'])) {
@@ -18,38 +26,43 @@ class SoftwareController
         throw new Exception('Token não fornecido ou inválido');
     }
 
-    function selectAll()
+    private function validateToken(): void
     {
-        $token = $this->getBearerToken();
-        $software = new Software();
-        return $software->selectAll($token);
+        // Validação do token (pode ser feita aqui ou em outro lugar centralizado)
     }
 
-    function selectById($id)
+    public function selectAll(): array
     {
-        $token = $this->getBearerToken();
+        $this->validateToken();
         $software = new Software();
-        return $software->selectById($id, $token);
+        return $software->selectAll($this->token);
     }
 
-    function cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    public function selectById(int $id): array
     {
-        $token = $this->getBearerToken();
+        $this->validateToken();
+        $software = new Software();
+        return $software->selectById($id, $this->token);
+    }
+
+    public function cadastrar(int $id, string $nome_software, string $versao_software, string $descricao_software, float $preco_software): bool
+    {
+        $this->validateToken();
         $software = new Software();
         return $software->cadastrar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
     }
 
-    function atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software)
+    public function atualizar(int $id, string $nome_software, string $versao_software, string $descricao_software, float $preco_software): bool
     {
-        $token = $this->getBearerToken();
+        $this->validateToken();
         $software = new Software();
         return $software->atualizar($id, $nome_software, $versao_software, $descricao_software, $preco_software);
     }
 
-    function excluir($id)
+    public function excluir(int $id): bool
     {
-        $token = $this->getBearerToken();
+        $this->validateToken();
         $software = new Software();
-        return $software->excluir($id, $token);
+        return $software->excluir($id, $this->token);
     }
 }
