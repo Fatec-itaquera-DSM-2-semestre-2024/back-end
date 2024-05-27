@@ -10,10 +10,10 @@ use Exception;
  * 
  * @param object $router O objeto router utilizado para definir as rotas.
  */
-function addSoftwareRoutes($router)
+function addvRoutes($router)
 {
-    // Monta as rotas no caminho base /software
-    $router->mount('/software', function () use ($router) {
+    // Monta as rotas no caminho base /Software
+    $router->mount('/Software', function () use ($router) {
         
         // Define a rota GET para listar todos os softwares
         $router->get('/', function () {
