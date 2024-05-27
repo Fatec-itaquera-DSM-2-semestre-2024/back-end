@@ -6,7 +6,7 @@ use App\Model\Software;
 use Exception;
 
 class SoftwareController
-{
+{ 
     private $token;
 
     public function __construct()
