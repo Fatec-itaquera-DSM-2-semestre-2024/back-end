@@ -1,100 +1,132 @@
 <?php
+
 namespace App\Model;
-class Reserva {
-    private int $id;
-    private string $destinatario_reserva;
-    private string $observacao_reserva;
-    private string $data_reserva;
-    private string $horario_inicio;
-    private string $horario_fim;
-    private int $confirmada_reserva;
-    private int $id_usuario;
-    public $conn;
 
-    public function __construct() {
-        $this->conn = new Model();
-        $this->conn->createTableFromModel($this);
+use App\Database\Connection;
+use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+class Reserva
+{
+    private $secretKey = 'sua_chave_secreta'; // Mesma chave secreta usada para gerar o token
+
+    private function validateToken($token)
+    {
+        try {
+            $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
+            return $decoded->data; // Retorna os dados do usuário do token
+        } catch (Exception $e) {
+            throw new Exception('Token inválido ou expirado');
+        }
     }
 
-    public function getId() {
-        return $this->id;
+    function selectAll($token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'SELECT * FROM reserva';
+            return $db->query($sql);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    function selectById($id, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'SELECT * FROM reserva WHERE id_reserva = :id';
+            return $db->query($sql, ['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function getDestinatarioReserva() {
-        return $this->destinatario_reserva;
+    function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'INSERT INTO reserva (
+                id_reserva, 
+                destinatario_reserva, 
+                observacao, 
+                data_reserva, 
+                horario_inicio, 
+                horario_fim, 
+                confirmada, 
+                id_sala, 
+                id_usuario
+            ) VALUES (
+                :id, 
+                :destinatario, 
+                :observacao, 
+                :data, 
+                :horario_inicio, 
+                :horario_fim, 
+                :confirma, 
+                :id_sala, 
+                :id_usuario
+            )';
+            return $db->query_insert($sql, [
+                'id' => $id,
+                'destinatario' => $destinatario,
+                'observacao' => $observacao,
+                'data' => $data,
+                'horario_inicio' => $horario_inicio,
+                'horario_fim' => $horario_fim,
+                'confirma' => $confirma,
+                'id_sala' => $id_sala,
+                'id_usuario' => $id_usuario
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function setDestinatarioReserva($destinatario_reserva) {
-        $this->destinatario_reserva = $destinatario_reserva;
+    function atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'UPDATE reserva SET 
+                destinatario_reserva = :destinatario, 
+                observacao = :observacao, 
+                data_reserva = :data, 
+                horario_inicio = :horario_inicio, 
+                horario_fim = :horario_fim, 
+                confirmada = :confirma, 
+                id_sala = :id_sala, 
+                id_usuario = :id_usuario 
+                WHERE id_reserva = :id';
+            return $db->query_update($sql, [
+                'id' => $id,
+                'destinatario' => $destinatario,
+                'observacao' => $observacao,
+                'data' => $data,
+                'horario_inicio' => $horario_inicio,
+                'horario_fim' => $horario_fim,
+                'confirma' => $confirma,
+                'id_sala' => $id_sala,
+                'id_usuario' => $id_usuario
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function getObservacaoReserva() {
-        return $this->observacao_reserva;
-    }
-
-    public function setObservacaoReserva($observacao_reserva) {
-        $this->observacao_reserva = $observacao_reserva;
-    }
-
-    public function getDataReserva() {
-        return $this->data_reserva;
-    }
-
-    public function setDataReserva($data_reserva) {
-        $this->data_reserva = $data_reserva;
-    }
-
-    public function getHorarioInicio() {
-        return $this->horario_inicio;
-    }
-
-    public function setHorarioInicio($horario_inicio) {
-        $this->horario_inicio = $horario_inicio;
-    }
-
-    public function getHorarioFim() {
-        return $this->horario_fim;
-    }
-
-    public function setHorarioFim($horario_fim) {
-        $this->horario_fim = $horario_fim;
-    }
-
-    public function getConfirmadaReserva() {
-        return $this->confirmada_reserva;
-    }
-
-    public function setConfirmadaReserva($confirmada_reserva) {
-        $this->confirmada_reserva = $confirmada_reserva;
-    }
-
-    public function getIdUsuario() {
-        return $this->id_usuario;
-    }
-
-    public function setIdUsuario($id_usuario) {
-        $this->id_usuario = $id_usuario;
-    }
-    
-    public function getType() {
-        return 'User';
-    }
-
-    public function toArray() {
-        return [
-            'id' => $this->getId(),
-            'destinatario_reserva' => $this->getDestinatarioReserva(),
-            'observacao_reserva' => $this->getObservacaoReserva(),
-            'data_reserva' => $this->getDataReserva(),
-            'horario_inicio' => $this->getHorarioInicio(),
-            'horario_fim' => $this->getHorarioFim(),
-            'confirmada_reserva' => $this->getConfirmadaReserva(),
-            'id_usuario' => $this->getIdUsuario(),
-            'type' => $this->getType()
-        ];
+    function excluir($id, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'DELETE FROM reserva WHERE id_reserva = :id';
+            return $db->query_delete($sql, ['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

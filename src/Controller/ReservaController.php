@@ -2,46 +2,55 @@
 
 namespace App\Controller;
 
-use App\Model\Model;
+use App\Model\Reserva;
+use Exception;
 
-class ReservaController {
+class ReservaController
+{
+    private function getBearerToken()
+    {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = [];
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                return $matches[1];
+            }
+        }
+        throw new Exception('Token não fornecido ou inválido');
+    }
 
-    private $db;
+    function selectAll()
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->selectAll($token);
+    }
 
-    public function __construct() {
-        $this->db = new Model();
+    function selectById($id)
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->selectById($id, $token);
     }
-    public function select(){
-        $user = $this->db->select('reservas');
-        
-        return  $user;
+
+    function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token);
     }
-    public function selectId($id){
-        $user = $this->db->select('reservas',['id'=>$id]);
-        
-        return  $user;
+
+    function atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token);
     }
-    public function insert($data){
-        if($this->db->insert('reservas', $data)){
-            return true;
-        }
-        return false;
-    }
-    
-    public function update($newData,$conditions){
-        if($this->db->update('reservas', $newData, ['id'=>$conditions])){
-            return true;
-        }
-        return false;
-    }
-    public function delete( $id){
-        $resultado =$this->selectId($id);
-        if(count($resultado)<1){
-            return false;
-        }
-        if($this->db->delete('reservas', ['id'=>$id])){
-            return true;
-        }
-        return false;        
+
+    function excluir($id)
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->excluir($id, $token);
     }
 }
