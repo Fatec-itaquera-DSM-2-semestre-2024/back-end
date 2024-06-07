@@ -9,6 +9,7 @@ $router = new Router();
 require __DIR__ . '/Usuarios.php';
 require __DIR__ . '/Reservas.php';
 require __DIR__ . '/Software.php';
+require __DIR__ . '/Salas.php';
 
 header('Content-Type: application/json');
 
@@ -40,6 +41,7 @@ $router->before('GET', '/.*', function () {
 addUsuarioRoutes($router);
 addReservaRoutes($router);
 addSoftwareRoutes($router);
+addSalaRoutes($router);
 
 $router->run();
 
