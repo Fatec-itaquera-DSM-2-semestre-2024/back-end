@@ -1,72 +1,102 @@
 <?php
 
 namespace App\Model;
-use Ramsey\Uuid\Uuid;
 
-class Salas {
-    private $id;
-    private int $numerosala;
-    private int $capacidadesala;
-    private int $ativo;
-    private string $sala= 'salas';
-  
-    public function __construct()
-    {
-        $this->id = Uuid::uuid4()->toString();
-    }
-    
-    public function getSala(): string
-    {
-        return $this->sala;
-    }
-    public function getId(): string
-    {
-        return $this->id;
-    }
-    public function setId(string $id): self
-    {
-        $this->id = $id;
+use App\Database\Connection;
+use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
-        return $this;
-    }
-    public function getNumerosala(): int
-    {
-        return $this->numerosala;
-    }
-    public function setNumerosala(int $numerosala): self
-    {
-        $this->numerosala = $numerosala;
+class Sala
+{
+    private $secretKey = 'sua_chave_secreta'; // Mesma chave secreta usada para gerar o token
 
-        return $this;
-    }
-    
-    public function getCapacidadesala(): int
+    private function validateToken($token)
     {
-        return $this->capacidadesala;
-    }
-    public function setCapacidadesala(int $capacidadesala): self
-    {
-        $this->capacidadesala = $capacidadesala;
-
-        return $this;
-    }
-    public function getAtivo(): int
-    {
-        return $this->ativo;
-    }
-    public function setAtivo(int $ativo): self
-    {
-        $this->ativo = $ativo;
-
-        return $this;
+        try {
+            $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
+            return $decoded->data; // Retorna os dados do usuário do token
+        } catch (Exception $e) {
+            throw new Exception('Token inválido ou expirado');
+        }
     }
 
-    public function toArray() {
-        return [
-            'id' => $this->id,
-            'numerosala' => $this->numerosala,
-            'capacidadesala' => $this->capacidadesala,
-            'ativo' => $this->ativo
-        ];
+    function selectAll($token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'SELECT * FROM sala';
+            return $db->query($sql);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function selectById($id, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'SELECT * FROM sala WHERE id_sala = :id';
+            return $db->query($sql, ['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function cadastrar($id_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'INSERT INTO sala (
+                id_sala, numero_sala, capacidade_sala, id_equipamento
+            ) VALUES (
+                :id_sala, :numero_sala, :capacidade_sala, :id_equipamento
+            )';
+            return $db->query_insert($sql, [
+                'id_sala' => $id_sala,
+                'numero_sala' => $numero_sala,
+                'capacidade_sala' => $capacidade_sala,
+                'id_equipamento' => $id_equipamento
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function atualizar($id, $numero_sala, $capacidade_sala, $id_equipamento, $token)
+{
+    try {
+        $this->validateToken($token);
+        $db = new Connection();
+        $sql = 'UPDATE sala SET 
+            numero_sala = :numero_sala, 
+            capacidade_sala = :capacidade_sala,
+            id_equipamento = :id_equipamento
+            WHERE id_sala = :id_sala';
+        return $db->query_update($sql, [
+            'id_sala' => $id, 
+            'numero_sala' => $numero_sala,
+            'capacidade_sala' => $capacidade_sala,
+            'id_equipamento' => $id_equipamento
+        ]);
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
+}
+
+
+    function excluir($id, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $db = new Connection();
+            $sql = 'DELETE FROM sala WHERE id_sala = :id';
+            return $db->query_delete($sql, ['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
