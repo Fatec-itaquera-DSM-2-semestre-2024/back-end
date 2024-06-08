@@ -3,42 +3,66 @@
 namespace App\Controller;
 
 use App\Model\Usuario;
+use App\Model\UsuarioComum;
+use App\Model\Administrador;
+use App\Model\AdministradorSupremo;
+use Exception;
 
 class UsuarioController
 {
-    function selectAll()
+    private function getBearerToken()
     {
-        $usuario = new Usuario();
-        return $usuario->selectAll();
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = [];
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                return $matches[1];
+            }
+        }
+        throw new Exception('Token não fornecido ou inválido');
     }
 
-    function selectById($id)
-    {
-        $usuario = new Usuario();
-        return $usuario->selectById($id);
-    }
-
-    function cadastrar($id, $nome, $login, $email, $senha)
-    {
-        $usuario = new Usuario();
-        return $usuario->cadastrar($id, $nome, $login, $email, $senha);
-    }
-
+    // Funções para Usuario.php
     function login($login, $senha)
     {
         $usuario = new Usuario();
         return $usuario->login($login, $senha);
     }
 
-    function atualizar($id, $nome, $login, $email, $senha)
+    function cadastrar($nome, $login, $email, $senha)
     {
         $usuario = new Usuario();
-        return $usuario->atualizar($id, $nome, $login, $email, $senha);
+        return $usuario->cadastrar($nome, $login, $email, $senha);
+    }
+
+
+    // Funções para AdministradorSupremo.php
+    function selectAll()
+    {
+        $token = $this->getBearerToken();
+        $adm_super = new AdministradorSupremo();
+        return $adm_super->selectAll($token);
+    }
+
+    function selectById($id)
+    {
+        $token = $this->getBearerToken();
+        $adm_super = new AdministradorSupremo();
+        return $adm_super->selectById($token, $id);
+    }
+
+    function atualizar($id, $nome, $login, $email, $senha, $perfil)
+    {
+        $token = $this->getBearerToken();
+        $adm_super = new AdministradorSupremo();
+        return $adm_super->atualizar($token, $id, $nome, $login, $email, $senha, $perfil);
     }
 
     function excluir($id)
     {
-        $usuario = new Usuario();
-        return $usuario->excluir($id);
+        $token = $this->getBearerToken();
+        $adm_super = new AdministradorSupremo();
+        return $adm_super->excluir($token, $id);
     }
 }
+

@@ -20,7 +20,7 @@ function addUsuarioRoutes($router)
         $router->post('/cadastrar', function () {
             $usuario = new UsuarioController();
             $data = json_decode(file_get_contents('php://input'), true);
-            echo json_encode($usuario->cadastrar($data['id'], $data['nome'], $data['login'], $data['email'], $data['senha']));
+            echo json_encode($usuario->cadastrar($data['nome'], $data['login'], $data['email'], $data['senha']));
         });
 
         $router->post('/login', function () {
@@ -32,7 +32,7 @@ function addUsuarioRoutes($router)
         $router->put('/{id}', function ($id) {
             $usuario = new UsuarioController();
             $data = json_decode(file_get_contents('php://input'), true);
-            echo json_encode($usuario->atualizar($id, $data['nome'], $data['login'], $data['email'], $data['senha']));
+            echo json_encode($usuario->atualizar($id, $data['nome'], $data['login'], $data['email'], $data['senha'], $data['perfil']));
         });
 
         $router->delete('/{id}', function ($id) {

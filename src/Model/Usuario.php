@@ -8,41 +8,23 @@ use Firebase\JWT\JWT;
 
 class Usuario
 {
-
-    function selectAll()
-    {
-        try {
-            $db = new Connection();
-            $sql = 'SELECT * FROM usuarios';
-            return $db->query($sql);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    function selectById($id)
-    {
-        try {
-            $db = new Connection();
-            $sql = 'SELECT * FROM usuarios WHERE id_usuario = :id';
-            return $db->query($sql, ['id' => $id]);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    function cadastrar($id, $nome, $login, $email, $senha)
-    {
-        try {
-            $db = new Connection();
-            $sql = 'INSERT INTO usuarios (id_usuario, nome_usuario, login, email, senha, criado) VALUES (:id, :nome, :login, :email, :senha, NOW())';
-            return $db->query_insert($sql, ['id' => $id, 'nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $senha]);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
+    protected $id;
+    protected $nome;
+    protected $login;
+    protected $email;
+    protected $senha;
     private $secretKey = 'sua_chave_secreta'; // Troque isso por uma chave secreta forte
+
+    function cadastrar($nome, $login, $email, $senha)
+    {
+        try {
+            $db = new Connection();
+            $sql = 'INSERT INTO usuarios (nome_usuario, login, email, senha) VALUES (:nome, :login, :email, :senha)';
+            return $db->query_insert($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $senha]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     function login($login, $senha)
     {
@@ -61,11 +43,12 @@ class Usuario
                     'exp' => time() + (60 * 60), // Expiration time (1 hour)
                     'data' => [
                         'id' => $user['id_usuario'],
-                        'login' => $user['login']
+                        'login' => $user['login'],
+                        'perfil' => $user['perfil']
                     ]
                 ];
                 $jwt = JWT::encode($payload, $this->secretKey, 'HS256');
-                return ['success' => 'Login efetuado com sucesso', 'token' => $jwt, 'id' => $user['id_usuario'], 'user' => $user['nome_usuario'],'login' => $user['login']];
+                return ['success' => 'Login efetuado com sucesso', 'token' => $jwt, 'id' => $user['id_usuario'], 'user' => $user['nome_usuario'], 'login' => $user['login'], 'perfil' => $user['perfil']];
             } else {
                 return ['error' => 'Login ou senha inválidos'];
             }
@@ -74,25 +57,4 @@ class Usuario
         }
     }
 
-    function atualizar($id, $nome, $login, $email, $senha)
-    {
-        try {
-            $db = new Connection();
-            $sql = 'UPDATE usuarios SET nome_usuario = :nome, login = :login, email = :email, senha = :senha, criado = NOW() WHERE id_usuario = :id';
-            return $db->query_update($sql, ['id' => $id, 'nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $senha]);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    function excluir($id)
-    {
-        try {
-            $db = new Connection();
-            $sql = 'DELETE FROM usuarios WHERE id_usuario = :id';
-            return $db->query_update($sql, ['id' => $id]);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
 }
