@@ -139,12 +139,24 @@ class Reserva
     {
         try {
             $this->validateToken($token);
-            $db = new Connection();
-            $sql = 'DELETE FROM reserva WHERE id_reserva = :id';
-            if ($db->query_delete($sql, ['id' => $id])) {
-                return ['success' => 'Reserva excluída com sucesso'];
+            $decoded = $this->validateToken($token);
+            if($decoded->perfil == 'administrador_supremo' || $decoded->perfil == 'administrador') {
+                $db = new Connection();
+                $sql = 'DELETE FROM reserva WHERE id_reserva = :id';
+                if ($db->query_delete($sql, ['id' => $id])) {
+                    return ['success' => 'Reserva excluída com sucesso'];
+                }
+                throw new Exception('Erro ao excluir reserva');
             }
-            throw new Exception('Erro ao excluir reserva');
+
+            elseif($decoded->perfil == 'usuario') {
+                $db = new Connection();
+                $sql = 'DELETE FROM reserva WHERE id_reserva = :id AND id_usuario = :id_usuario';
+                if ($db->query_delete($sql, ['id' => $id, 'id_usuario' => $decoded->id])) {
+                    return ['success' => 'Reserva excluída com sucesso'];
+                }
+                throw new Exception('Erro ao excluir reserva');
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }

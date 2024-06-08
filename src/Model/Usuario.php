@@ -21,7 +21,12 @@ class Usuario
         try {
             $db = new Connection();
             $sql = 'INSERT INTO usuarios (nome_usuario, login, email, senha) VALUES (:nome, :login, :email, :senha)';
-            return $db->query_insert($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $hasheada]);
+            try {
+                $db->query_insert($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $hasheada]);
+                return ['success' => 'Usuário cadastrado com sucesso'];
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }
