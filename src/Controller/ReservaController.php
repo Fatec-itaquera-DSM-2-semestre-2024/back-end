@@ -33,18 +33,18 @@ class ReservaController
         return $reserva->selectById($id, $token);
     }
 
-    function cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    function cadastrar($destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala)
     {
         $token = $this->getBearerToken();
         $reserva = new Reserva();
-        return $reserva->cadastrar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token);
+        return $reserva->cadastrar($destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala, $token);
     }
 
-    function atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario)
+    function atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $status, $nome_sala)
     {
         $token = $this->getBearerToken();
         $reserva = new Reserva();
-        return $reserva->atualizar($id, $destinatario, $observacao, $data, $horario_inicio, $horario_fim, $confirma, $id_sala, $id_usuario, $token);
+        return $reserva->atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $status, $nome_sala, $token);
     }
 
     function excluir($id)

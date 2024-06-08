@@ -36,12 +36,19 @@ function addReservaRoutes($router)
 
         $router->post('/cadastrar', function () {
             try {
-                $reserva = new ReservaController();
+                $reservaController = new ReservaController();
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($reserva->cadastrar($data['id_reserva'], $data['destinatario_reserva'], $data['observacao'], $data['data_reserva'], $data['horario_inicio'], $data['horario_fim'], $data['confirma'], $data['id_sala'], $data['id_usuario'])) {
-                    echo json_encode(['success' => 'Reserva cadastrada com sucesso']);
+                $result = $reservaController->cadastrar(
+                    $data['destinatario_reserva'],
+                    $data['observacao'],
+                    $data['horario_inicio'],
+                    $data['horario_fim'],
+                    $data['nome_sala']
+                );
+                if (isset($result['success'])) {
+                    echo json_encode($result);
                 } else {
-                    echo json_encode(['error' => 'Erro ao cadastrar reserva']);
+                    echo json_encode(['error' => 'Erro ao cadastrar reserva', $result]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
@@ -52,11 +59,21 @@ function addReservaRoutes($router)
             try {
                 $reserva = new ReservaController();
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($reserva->atualizar($id, $data['destinatario_reserva'], $data['observacao'], $data['data_reserva'], $data['horario_inicio'], $data['horario_fim'], $data['confirma'], $data['id_sala'], $data['id_usuario'])) {
+                if ($reserva->atualizar(
+                    $id,
+                    $data['destinatario_reserva'],
+                    $data['observacao'],
+                    $data['horario_inicio'],
+                    $data['horario_fim'],
+                    $data['status'],
+                    $data['nome_sala'],
+                    
+                )) {
                     echo json_encode(['success' => 'Reserva atualizada com sucesso']);
                 } else {
                     echo json_encode(['error' => 'Erro ao atualizar reserva']);
                 }
+                
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
             }

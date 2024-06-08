@@ -13,7 +13,7 @@ class Connection
     {
         $servername = "localhost";
         $username = "root";
-        $password = "25521861";
+        $password = "3264";
         $dbname = "fatec";
         try {
             $this->pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
