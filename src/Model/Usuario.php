@@ -17,10 +17,11 @@ class Usuario
 
     function cadastrar($nome, $login, $email, $senha)
     {
+        $hasheada = password_hash($senha, PASSWORD_DEFAULT);
         try {
             $db = new Connection();
             $sql = 'INSERT INTO usuarios (nome_usuario, login, email, senha) VALUES (:nome, :login, :email, :senha)';
-            return $db->query_insert($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $senha]);
+            return $db->query_insert($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $hasheada]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -30,25 +31,30 @@ class Usuario
     {
         try {
             $db = new Connection();
-            $sql = 'SELECT * FROM usuarios WHERE login = :login AND senha = :senha';
-            $result = $db->query($sql, ['login' => $login, 'senha' => $senha]);
+        
+            $sql = 'SELECT * FROM usuarios WHERE login = :login';
+            $usuario = $db->query($sql, ['login' => $login]);
 
-            if (count($result) > 0) {
-                $user = $result[0];
-                $payload = [
-                    'iss' => "localhost:80", // Issuer
-                    'aud' => "fatec-itaquera.com", // Audience
-                    'iat' => time(), // Issued at
-                    'nbf' => time(), // Not before
-                    'exp' => time() + (60 * 60), // Expiration time (1 hour)
-                    'data' => [
-                        'id' => $user['id_usuario'],
-                        'login' => $user['login'],
-                        'perfil' => $user['perfil']
-                    ]
-                ];
-                $jwt = JWT::encode($payload, $this->secretKey, 'HS256');
-                return ['success' => 'Login efetuado com sucesso', 'token' => $jwt, 'id' => $user['id_usuario'], 'user' => $user['nome_usuario'], 'login' => $user['login'], 'perfil' => $user['perfil']];
+            if (count($usuario) > 0) {
+                $senha_verificada = password_verify($senha, $usuario[0]['senha']);
+                if ($senha_verificada) {
+                    $payload = [
+                        'iss' => "localhost:80", // Issuer
+                        'aud' => "fatec-itaquera.com", // Audience
+                        'iat' => time(), // Issued at
+                        'nbf' => time(), // Not before
+                        'exp' => time() + (60 * 60), // Expiration time (1 hour)
+                        'data' => [
+                            'id' => $usuario[0]['id_usuario'],
+                            'login' => $usuario[0]['login'],
+                            'perfil' => $usuario[0]['perfil']
+                        ]
+                    ];
+                    $jwt = JWT::encode($payload, $this->secretKey, 'HS256');
+                    return ['success' => 'Login efetuado com sucesso', 'token' => $jwt, 'id' => $usuario[0]['id_usuario'], 'user' => $usuario[0]['nome_usuario'], 'login' => $usuario[0]['login'], 'perfil' => $usuario[0]['perfil']];
+                } else {
+                    return ['error' => 'Login ou senha inválidos'];
+                }
             } else {
                 return ['error' => 'Login ou senha inválidos'];
             }
