@@ -68,7 +68,7 @@ function addSoftwareRoutes($router)
                 if ($software->excluir($id)) {
                     echo json_encode(['success' => 'Software excluído com sucesso']);
                 } else {
-                    echo json_encode(['error' => 'Erro ao excluir reserva']);
+                    echo json_encode(['error' => 'Erro ao excluir software']);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);

@@ -10,6 +10,7 @@ require __DIR__ . '/Usuarios.php';
 require __DIR__ . '/Reservas.php';
 require __DIR__ . '/Software.php';
 require __DIR__ . '/Salas.php';
+require __DIR__ . '/Equipamentos.php';
 
 header('Content-Type: application/json');
 
@@ -42,6 +43,7 @@ addUsuarioRoutes($router);
 addReservaRoutes($router);
 addSoftwareRoutes($router);
 addSalaRoutes($router);
+addEquipamentoRoutes($router);
 
 $router->run();
 
