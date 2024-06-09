@@ -29,7 +29,11 @@ class AdministradorSupremo extends Usuario
             if ($decoded->perfil == 'administrador_supremo') {
                 $db = new Connection();
                 $sql = 'SELECT * FROM usuarios';
-                return $db->query($sql);
+                try {
+                    return $db->query($sql);
+                } catch (Exception $e) {
+                    return $e->getMessage();
+                }
             } else {
                 return ['error' => 'Acesso negado'];
             }
@@ -46,7 +50,14 @@ class AdministradorSupremo extends Usuario
             if ($decoded->perfil == 'administrador_supremo') {
                 $db = new Connection();
                 $sql = 'SELECT * FROM usuarios WHERE id_usuario = :id_usuario';
-                return $db->query($sql, ['id_usuario' => $id]);
+                try {
+                    if ($usuario = $db->query($sql, ['id_usuario' => $id])) {
+                        return $usuario;
+                    }
+                    return ['error' => 'Usuário não encontrado'];
+                } catch (Exception $e) {
+                    return $e->getMessage();
+                }
             } else {
                 return ['error' => 'Acesso negado'];
             }
@@ -63,7 +74,13 @@ class AdministradorSupremo extends Usuario
             if ($decoded->perfil == 'administrador_supremo') {
                 $db = new Connection();
                 $sql = 'UPDATE usuarios SET nome_usuario = :nome, login = :login, email = :email, senha = :senha, perfil = :perfil WHERE id_usuario = :id_usuario';
-                return $db->query_update($sql, ['id_usuario' => $id_usuario, 'nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $senha, 'perfil' => $perfil]);
+                try {
+                    $hasheada = password_hash($senha, PASSWORD_DEFAULT);
+                    $db->query_update($sql, ['nome' => $nome, 'login' => $login, 'email' => $email, 'senha' => $hasheada, 'perfil' => $perfil, 'id_usuario' => $id_usuario]);
+                    return ['success' => 'Usuário atualizado com sucesso'];
+                } catch (Exception $e) {
+                    return $e->getMessage();
+                }
             } else {
                 return ['error' => 'Acesso negado'];
             }
@@ -80,7 +97,12 @@ class AdministradorSupremo extends Usuario
             if ($decoded->perfil == 'administrador_supremo') {
                 $db = new Connection();
                 $sql = 'DELETE FROM usuarios WHERE id_usuario = :id_usuario';
-                return $db->query_delete($sql, ['id_usuario' => $id]);
+                try {
+                    $db->query_delete($sql, ['id_usuario' => $id]);
+                    return ['success' => 'Usuário excluído com sucesso'];
+                } catch (Exception $e) {
+                    return $e->getMessage();
+                }
             } else {
                 return ['error' => 'Acesso negado'];
             }

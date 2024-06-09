@@ -56,24 +56,22 @@ function addReservaRoutes($router)
         });
 
         $router->put('/{id}', function ($id) {
+            
+        });
+
+        $router->patch('/{id}', function ($id) {
             try {
                 $reserva = new ReservaController();
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($reserva->atualizar(
-                    $id,
-                    $data['destinatario_reserva'],
-                    $data['observacao'],
-                    $data['horario_inicio'],
-                    $data['horario_fim'],
-                    $data['status'],
-                    $data['nome_sala'],
-                    
-                )) {
-                    echo json_encode(['success' => 'Reserva atualizada com sucesso']);
-                } else {
-                    echo json_encode(['error' => 'Erro ao atualizar reserva']);
+                try {
+                    if ($reserva->atualizarStatus($id, $data['status'])) {
+                        echo json_encode(['success' => 'Status da reserva atualizado com sucesso']);
+                    } else {
+                        echo json_encode(['error' => 'Acesso negado. Você não tem permissão para atualizar o status da reserva']);
+                    }
+                } catch (Exception $e) {
+                    echo json_encode(['error' => $e->getMessage()]);
                 }
-                
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
             }

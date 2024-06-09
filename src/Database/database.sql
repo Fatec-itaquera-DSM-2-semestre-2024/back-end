@@ -124,8 +124,8 @@ INSERT INTO movimentacao_equipamentos (data_mov_equipamento, quantidade_mov_equi
 ('2023-05-02 11:00:00', 1, '2023-05-12 11:00:00', 30.00, 'Reparação do projetor', 2);
 
 INSERT INTO reserva (destinatario_reserva, observacao, horario_inicio, horario_fim, id_usuario, nome_sala) VALUES
-('Evento Corporativo', 'Reserva para reunião',  '09:00:00', '12:00:00', 1, 'Sala 1'),
-('Treinamento', 'Treinamento de novos funcionários',  '13:00:00', '17:00:00', 2, 'Sala 2');
+('Evento Corporativo', 'Reserva para reunião',  '2023-05-10 10:00:00', '12:00:00', 1, 'Sala 1'),
+('Treinamento', 'Treinamento de novos funcionários',  '2023-05-10 10:00:00', '17:00:00', 2, 'Sala 2');
 INSERT INTO reserva (destinatario_reserva, observacao, horario_inicio, horario_fim, id_usuario, nome_sala) VALUES (':destinatario', ':observacao', '09:00:00', '09:00:00', 1, 'Sala 2');
 drop table reserva;
 SELECT* FROM USUARIOS;
