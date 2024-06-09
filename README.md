@@ -10,7 +10,6 @@
 ## Postman
 [Link](https://app.getpostman.com/join-team?invite_code=ceade3ccca6aafd05e148e412b8f5bef&target_code=f1ec94e150877067728285b121169ad1)
 
-
 ## 1. Usuários e Perfis
 
 #### 1.1 Cadastro de Usuários
@@ -34,7 +33,6 @@
 #### 1.3 Criar, Buscar, Listar, Atualizar e Excluir Usuários
 - **Todos Usuários recebem o tipo de perfil no token.
 - **Apenas usuários com perfil `administrador_supremo`** podem realizar as seguintes operações:
-  - Criar Usuario.
   - Listar todos os usuários.
   - Buscar usuários por ID.
   - Atualizar dados de usuários.
@@ -52,7 +50,7 @@
   - `observacao`
   - `horario_inicio`
   - `horario_fim`
-  - `id_usuario` (ID do usuário que está fazendo a reserva)
+  - `id_usuario` (Disponível no token)
   - `nome_sala`
 - Campos adicionais definidos automaticamente:
   - `status` (definido inicialmente como `pendente`)
@@ -98,4 +96,7 @@
   - `PUT /reservas/{id}`: Atualizar reserva (apenas pelo usuário que criou a reserva).
   - `DELETE /reservas/{id}`: Excluir reserva (apenas `administrador_supremo`).
   - `PATCH /reservas/{id}/status`: Alterar status da reserva (apenas `administrador`).
+ 
+## Postman
+[Link](https://app.getpostman.com/join-team?invite_code=ceade3ccca6aafd05e148e412b8f5bef&target_code=f1ec94e150877067728285b121169ad1)
 
