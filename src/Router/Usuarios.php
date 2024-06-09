@@ -35,6 +35,8 @@ function addUsuarioRoutes($router)
             echo json_encode($usuario->atualizar($id, $data['nome'], $data['login'], $data['email'], $data['senha'], $data['perfil']));
         });
 
+        
+
         $router->delete('/{id}', function ($id) {
             $usuario = new UsuarioController();
             echo json_encode($usuario->excluir($id));

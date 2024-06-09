@@ -40,11 +40,18 @@ class ReservaController
         return $reserva->cadastrar($destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala, $token);
     }
 
-    function atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $status, $nome_sala)
+    function atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala)
     {
         $token = $this->getBearerToken();
         $reserva = new Reserva();
-        return $reserva->atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $status, $nome_sala, $token);
+        return $reserva->atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala, $token);
+    }
+
+    function atualizarStatus($id_reserva, $status)
+    {
+        $token = $this->getBearerToken();
+        $reserva = new Reserva();
+        return $reserva->atualizarStatus($id_reserva, $status, $token);
     }
 
     function excluir($id)

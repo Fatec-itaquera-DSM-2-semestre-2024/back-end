@@ -92,21 +92,20 @@ class Reserva
         }
     }
 
-    function atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $status, $nome_sala, $token)
+    function atualizar($id_reserva, $destinatario, $observacao, $horario_inicio, $horario_fim, $nome_sala, $token)
     {
         try {
             $this->validateToken($token);
             $decoded = $this->validateToken($token);
             if($decoded->perfil == 'administrador_supremo' || $decoded->perfil == 'administrador') {
                 $db = new Connection();
-                $sql = 'UPDATE reserva SET destinatario_reserva = :destinatario, observacao = :observacao, horario_inicio = :horario_inicio, horario_fim = :horario_fim, status = :status, nome_sala = :nome_sala WHERE id_reserva = :id_reserva';
+                $sql = 'UPDATE reserva SET destinatario_reserva = :destinatario, observacao = :observacao, horario_inicio = :horario_inicio, horario_fim = :horario_fim, nome_sala = :nome_sala WHERE id_reserva = :id_reserva';
                 if ($db->query_update($sql, [
                     'id_reserva' => $id_reserva,
                     'destinatario' => $destinatario,
                     'observacao' => $observacao,
                     'horario_inicio' => $horario_inicio,
                     'horario_fim' => $horario_fim,
-                    'status' => $status,
                     'nome_sala' => $nome_sala
                 ])) {
                     return ['success' => 'Reserva atualizada com sucesso'];
@@ -129,6 +128,28 @@ class Reserva
                     return ['success' => 'Reserva atualizada com sucesso'];
                 }
                 throw new Exception('Erro ao atualizar reserva');
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function atualizarStatus($id_reserva, $status, $token)
+    {
+        try {
+            $this->validateToken($token);
+            $decoded = $this->validateToken($token);
+            if($decoded->perfil == 'administrador_supremo' || $decoded->perfil == 'administrador') {
+                $db = new Connection();
+                $sql = 'UPDATE reserva SET status = :status WHERE id_reserva = :id_reserva';
+                try {
+                    if ($db->query_update($sql, ['id_reserva' => $id_reserva, 'status' => $status])) {
+                        return ['success' => 'Status da reserva atualizado com sucesso'];
+                    }
+                    throw new Exception('Erro ao atualizar status da reserva');
+                } catch (Exception $e) {
+                    return $e->getMessage();
+                }
             }
         } catch (Exception $e) {
             return $e->getMessage();
