@@ -2,61 +2,55 @@
 
 namespace App\Controller;
 
-use App\Database\Crud;
-use PDOException;
+use App\Model\Sala;
+use Exception;
 
-class SalaController {
-    private $crud;
-
-    public function __construct() {
-        $this->crud = new Crud();
-    }
-
-    public function listarSalas() {
-        try {
-            $salas = $this->crud->select('salas');
-            return $salas;
-        } catch (PDOException $e) {
-            return ['error' => 'Erro ao listar as salas: ' . $e->getMessage()];
-        }
-    }
-
-    public function adicionarSala($dados) {
-        try {
-            $resultado = $this->crud->insert('salas', $dados);
-            if ($resultado) {
-                return ['success' => 'Sala adicionada com sucesso.'];
-            } else {
-                return ['error' => 'Erro ao adicionar a sala.'];
+class SalaController
+{
+    private function getBearerToken()
+    {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = [];
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                return $matches[1];
             }
-        } catch (PDOException $e) {
-            return ['error' => 'Erro ao adicionar a sala: ' . $e->getMessage()];
         }
+        throw new Exception('Token não fornecido ou inválido');
     }
 
-    public function atualizarSala($id, $novosDados) {
-        try {
-            $resultado = $this->crud->update('salas', $novosDados, ['id' => $id]);
-            if ($resultado) {
-                return ['success' => 'Sala atualizada com sucesso.'];
-            } else {
-                return ['error' => 'Erro ao atualizar a sala.'];
-            }
-        } catch (PDOException $e) {
-            return ['error' => 'Erro ao atualizar a sala: ' . $e->getMessage()];
-        }
+    function selectAll()
+    {
+        $token = $this->getBearerToken();
+        $sala = new Sala();
+        return $sala->selectAll($token);
     }
 
-    public function excluirSala($id) {
-        try {
-            $resultado = $this->crud->delete('salas', ['id' => $id]);
-            if ($resultado) {
-                return ['success' => 'Sala excluída com sucesso.'];
-            } else {
-                return ['error' => 'Erro ao excluir a sala.'];
-            }
-        } catch (PDOException $e) {
-            return ['error' => 'Erro ao excluir a sala: ' . $e->getMessage()];
-        }
+    function selectById($id)
+    {
+        $token = $this->getBearerToken();
+        $sala = new Sala();
+        return $sala->selectById($id, $token);
+    }
+
+    function cadastrar($nome_sala, $numero_sala, $capacidade_sala, $id_equipamento)
+    {
+        $token = $this->getBearerToken();
+        $sala = new Sala();
+        return $sala->cadastrar($nome_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token);
+    }
+
+    function atualizar($id, $nome_sala, $numero_sala, $capacidade_sala, $id_equipamento)
+    {
+        $token = $this->getBearerToken();
+        $sala = new Sala();
+        return $sala->atualizar($id, $nome_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token);
+    }
+
+    function excluir($id)
+    {
+        $token = $this->getBearerToken();
+        $sala = new Sala();
+        return $sala->excluir($id, $token);
     }
 }
