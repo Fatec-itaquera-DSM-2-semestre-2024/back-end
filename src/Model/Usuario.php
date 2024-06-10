@@ -13,7 +13,7 @@ class Usuario
     protected $login;
     protected $email;
     protected $senha;
-    private $secretKey = 'sua_chave_secreta'; // Troque isso por uma chave secreta forte
+    private $secretKey = 'sua_chave_secreta';
 
     function cadastrar($nome, $login, $email, $senha)
     {

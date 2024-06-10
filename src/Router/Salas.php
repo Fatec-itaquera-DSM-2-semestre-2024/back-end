@@ -12,9 +12,9 @@ function addSalaRoutes($router)
             try {
                 $sala = new SalaController();
                 if ($salas = $sala->selectAll()) {
-                    echo json_encode($salas);
+                    echo json_encode(['success' => 'Salas encontradas', 'result' => $salas]);
                 } else {
-                    echo json_encode(['error' => 'Nenhuma sala encontrada']);
+                    echo json_encode(['error' => 'Nenhuma sala encontrada', 'result' => $salas]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
@@ -38,10 +38,11 @@ function addSalaRoutes($router)
             try {
                 $sala = new SalaController();
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($sala->cadastrar($data['id_sala'], $data['numero_sala'], $data['capacidade_sala'], $data['id_equipamento'])) {
-                    echo json_encode(['success' => 'Sala cadastrada com sucesso']);
+                $result = $sala->cadastrar($data['nome_sala'], $data['numero_sala'], $data['capacidade_sala'], $data['id_equipamento']);
+                if ($result) {
+                    echo json_encode(['success' => 'Sala cadastrada com sucesso', 'result' => $result]);
                 } else {
-                    echo json_encode(['error' => 'Erro ao cadastrar sala']);
+                    echo json_encode(['error' => 'Erro ao cadastrar sala', 'result' => $result]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
@@ -52,10 +53,11 @@ function addSalaRoutes($router)
             try {
                 $sala = new SalaController();
                 $data = json_decode(file_get_contents('php://input'), true);
-                if ($sala->atualizar($id, $data['numero_sala'], $data['capacidade_sala'], $data['id_equipamento'])) {
-                    echo json_encode(['success' => 'Sala atualizada com sucesso']);
+                $result = $sala->atualizar($id, $data['nome_sala'], $data['numero_sala'], $data['capacidade_sala'], $data['id_equipamento']);
+                if ($result) {
+                    echo json_encode(['success' => 'Sala atualizada com sucesso', 'result' => $result]);
                 } else {
-                    echo json_encode(['error' => 'Erro ao atualizar sala']);
+                    echo json_encode(['error' => 'Erro ao atualizar sala', 'result' => $result]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);
@@ -65,10 +67,11 @@ function addSalaRoutes($router)
         $router->delete('/{id}', function ($id) {
             try {
                 $sala = new SalaController();
-                if ($sala->excluir($id)) {
-                    echo json_encode(['success' => 'Sala excluída com sucesso']);
+                $result = $sala->excluir($id);
+                if ($result) {
+                    echo json_encode(['success' => 'Sala deletada com sucesso', 'result' => $result]);
                 } else {
-                    echo json_encode(['error' => 'Erro ao excluir sala']);
+                    echo json_encode(['error' => 'Erro ao deletar sala', 'result' => $result]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['error' => $e->getMessage()]);

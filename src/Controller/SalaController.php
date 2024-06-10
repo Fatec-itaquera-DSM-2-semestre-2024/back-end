@@ -33,18 +33,18 @@ class SalaController
         return $sala->selectById($id, $token);
     }
 
-    function cadastrar($id_sala, $numero_sala, $capacidade_sala, $id_equipamento)
+    function cadastrar($nome_sala, $numero_sala, $capacidade_sala, $id_equipamento)
     {
         $token = $this->getBearerToken();
         $sala = new Sala();
-        return $sala->cadastrar($id_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token);
+        return $sala->cadastrar($nome_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token);
     }
 
-    function atualizar($id, $numero_sala, $capacidade_sala, $id_equipamento)
+    function atualizar($id, $nome_sala, $numero_sala, $capacidade_sala, $id_equipamento)
     {
         $token = $this->getBearerToken();
         $sala = new Sala();
-        return $sala->atualizar($id, $numero_sala, $capacidade_sala, $id_equipamento, $token);
+        return $sala->atualizar($id, $nome_sala, $numero_sala, $capacidade_sala, $id_equipamento, $token);
     }
 
     function excluir($id)

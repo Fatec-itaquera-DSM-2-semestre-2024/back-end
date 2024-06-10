@@ -18,7 +18,7 @@ CREATE TABLE usuarios (
 -- update usuarios set perfil = 'AdmiNisTrador_sUpReMo' where id_usuario = 4;
 
 -- select * from usuarios;
-select * from reserva;
+-- select * from reserva;
 -- SELECT * FROM reserva WHERE id_usuario = 2;
 
 -- Tabela de Equipamentos
@@ -93,6 +93,7 @@ CREATE TABLE reserva (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (nome_sala) REFERENCES sala(nome_sala)
 );
+
 INSERT INTO usuarios (nome_usuario, login, senha, email, perfil) VALUES
 ('Daniel Rodrigues', 'daniel', '123', 'danel@example.com', 'administrador_supremo'),
 ('Cecilia Prado', 'cecilia', '123', 'cecilia@example.com', 'administrador');
@@ -124,14 +125,7 @@ INSERT INTO movimentacao_equipamentos (data_mov_equipamento, quantidade_mov_equi
 ('2023-05-02 11:00:00', 1, '2023-05-12 11:00:00', 30.00, 'Reparação do projetor', 2);
 
 INSERT INTO reserva (destinatario_reserva, observacao, horario_inicio, horario_fim, id_usuario, nome_sala) VALUES
-('Evento Corporativo', 'Reserva para reunião',  '2023-05-10 10:00:00', '12:00:00', 1, 'Sala 1'),
-('Treinamento', 'Treinamento de novos funcionários',  '2023-05-10 10:00:00', '17:00:00', 2, 'Sala 2');
-INSERT INTO reserva (destinatario_reserva, observacao, horario_inicio, horario_fim, id_usuario, nome_sala) VALUES (':destinatario', ':observacao', '09:00:00', '09:00:00', 1, 'Sala 2');
-drop table reserva;
-SELECT* FROM USUARIOS;
-select* from reserva;
-select* from sala;
+('Evento Corporativo', 'Reserva para reunião',  '2023-05-10 10:00:00', '2023-05-10  12:00:00', 1, 'Sala 1'),
+('Treinamento', 'Treinamento de novos funcionários',  '2023-05-10 10:00:00', '2023-05-10  12:00:00', 2, 'Sala 2');
 
-
-
-
+-- INSERT INTO reserva (destinatario_reserva, observacao, horario_inicio, horario_fim, id_usuario, nome_sala) VALUES (':destinatario', ':observacao', '2023-05-10 09:00:00', '2023-05-10 09:00:00', 1, 'Sala 2');
